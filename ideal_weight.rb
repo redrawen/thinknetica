@@ -1,3 +1,4 @@
+# encoding: utf-8
 puts "Введите ваше имя"
 name = gets.chomp
 puts "Введите ваш рост"

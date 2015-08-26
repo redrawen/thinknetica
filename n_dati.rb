@@ -6,7 +6,7 @@ m = gets.chomp.to_i
 puts "Введите год"
 y = gets.chomp.to_i
 
-if y % 4 == 0
+if y % 4 == 0 && y != 0
 	puts "!!! высокосный год !!!"
 	feb = 29.to_i
 else 

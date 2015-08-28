@@ -2,11 +2,11 @@
 class Train
   #attr_writer:speed
   #attr_reader:speed # геттер  
-  attr_accessor:speed # и геттер и сеттер
+  #attr_accessor:speed # и геттер и сеттер
 
 @@trains_number = 0
 
-  def initialize(name,type,cars = 0) 
+  def initialize(name,type,cars) 
     @name = name
     @type = type
     @cars = cars
@@ -14,56 +14,57 @@ class Train
     @route = []
     @@trains_number += 1
     @number = @@trains_number
-    puts "New train number #{@number} (train_#{@number}: type => #{@type}, cars number => #{@cars})!!!"
+    puts "Новый поезд НОМЕР: #{@number} (train_#{@number}: ТИП: #{@type}, КОЛ_ВО ВАГОНОВ: #{@cars})!!!"
   end
 
   #def description
   #puts "Поезд: #{name}, тип: #{type}, кол-во вагонов: #{cars}!"
 #end
 
-def accelerate(value)
-    self.speed += value
-    puts "Add #{value} to the train_#{@number} current speed"
+  def accelerate(value)
+    @speed += value
+    puts "Добавлено #{value} к текущей скорости поезда #{@number}"
   end
 
   def current_speed
-    puts "Current speed of train_#{@number} is #{@speed}"
+    puts "Текущая скорость поезда #{@number} - #{@speed}"
   end
 
   def slow_down(value)
-    if speed == 0
-      puts "The train_#{@number} is not moving!"
+    if @speed == 0
+      puts "Поезд #{@number} не движется!"
     elsif @speed > value
-      speed -= value
-      puts "Reduce train_#{@number} speed by #{value}"
+      @speed -= value
+      puts "Уменьшить скорость #{@number} на #{value}"
     else
-      speed = 0
-      puts "The train_#{@number} stopped"
+      @speed = 0
+      puts "Поезд #{@number} остановлен"
     end
-    
-    def cars
-    puts "There are #{@cars} cars in the train_#{@number} now"
-    end
+  end 
+
+  def cars
+    puts "Кол-во вагонов #{@cars} у поезда #{@number}"
+  end
 
   def add_car
-    if speed == 0
-      cars += 1
-      puts "Car added to the train_#{@number}"
+    if @speed == 0
+      @cars += 1
+      puts "Вагон прицеплен к поезду #{@number}"
     else
-      puts "Sorry can't add a car to the moving train (train_#{@number})"
+      puts "нельзя прицепить вагон к движущемуся поезду(train_#{@number})"
     end
   end
 
   def car_remove
-    if speed == 0
-      if cars > 0
-        cars -= 1
-        puts "Car removed from the train_#{@number}"
+    if @speed == 0
+      if @cars > 0
+        @cars -= 1
+        puts "Вагон отцеплен от поезда#{@number}"
       else
-        puts "There is no cars to remove from the train_#{@number}!"
+        puts "Нет вагоно для отцепки#{@number}!"
       end
     else
-      puts "Sorry can't remove a car from the moving train (train_#{@number})"
+      puts "Нельзя отцепить вагон от движущегося поезда(train_#{@number})"
     end
   end
 
@@ -75,18 +76,18 @@ def accelerate(value)
   def move_to(station)
     if @route.include?(station)
       @station = station
-      puts "The train_#{@number} current station is: #{@station}."
+      puts "Для поезда #{@number} текущая станция: #{@station}."
     else
-      puts "Could not move train_#{@number} to the #{station}.The station isn't in the route list."
+      puts "Нельзя переместить поезд #{@number} на станцию #{station}.Такой станции нет в маршруте."
     end
   end
 
   def position
-    puts "The train_#{@number} current station is: #{@station}."
+    puts "Для поезда #{@number} текущая станция: #{@station}."
   end
 
   def train_params
-    return {type: @type, car_number: @car_number}
+    return {type: @type, cars: @cars}
   end
 end
 
@@ -96,37 +97,37 @@ class RailwayStation
     @name = name
     @trains = []
     @@stations_num += 1
-    puts "New station (#{@name})!!!"
+    puts "Новая станция (#{@name})!!!"
   end
 
   def take_train(params = {})
-    if params[:type].nil? || params[:car_number].nil?
-      puts "Station can not take nonexistent train!"
+    if params[:type].nil? || params[:cars].nil?
+      puts "Не существующий поезд. Невозможно принять на станцию!"
     else
-      @trains << {type: params[:type], car_number: params[:car_number]}
-      puts "One more train (type: #{params[:type]}, car number: #{params[:car_number]}) arrived to the #{@name} station."
-      puts "Now there are #{@trains.size} trains on the station."
+      @trains << {type: params[:type], cars: params[:cars]}
+      puts "Еще один поезд (type: #{params[:type]}, кол-во вагонов: #{params[:cars]}) прибыл на станцию #{@name}."
+      puts "Сейчас #{@trains.size} поездов на станции"
     end
   end
 
   def trains
-    puts "There are total #{@trains.size} trains on the #{@name} station:"
-    @trains.each_with_index { |train, index| puts "#{index + 1}. #{train[:type]}, #{train[:cars]} cars"}
+    puts "Всего #{@trains.size} поездов на станции #{@name}:"
+    @trains.each_with_index { |train, index| puts "#{index + 1}. #{train[:type]}, #{train[:cars]} вагонов"}
   end
 
-  def trains_by_type
-    puts "There are total #{@trains.size} trains on the #{@name} station:"
-    puts " -- cargo: #{(@trains.select {|train| train[:type] == "cargo"}).size}"
-    puts " -- passenger: #{(@trains.select {|train| train[:type] == "passenger"}).size}"
+  def trains_type
+    puts "Всего #{@trains.size} поездов на станции #{@name}:"
+    puts " - грузовых: #{(@trains.select {|train| train[:type] == "груз"}).size}"
+    puts " - пассажирских: #{(@trains.select {|train| train[:type] == "пасс"}).size}"
   end
 
   def send_train(params = {})
-    if @trains.include?({ type: params[:type], car_number: params[:car_number] }) 
-      @trains.delete({ type: params[:type], car_number: params[:car_number] })
-      puts "Train (type: #{params[:type]}, car number: #{params[:car_number]}) leaved the #{@name} station."
-      puts "Now there are #{@trains.size} trains on the station."
+    if @trains.include?({ type: params[:type], cars: params[:cars] }) 
+      @trains.delete({ type: params[:type], cars: params[:cars] })
+      puts "Поезд (type: #{params[:type]}, кол-во вагонов: #{params[:cars]}) покинул станцию #{@name}."
+      puts "Теперь кол-во поездов на станции: #{@trains.size}."
     else
-      puts "No more trains left on the #{@name} station."
+      puts "На станции #{@name} нет поездов."
     end
   end
 end
@@ -134,33 +135,34 @@ end
 
 class Route
   @@routes_number = 0
+
   def initialize(stations = [])
     if stations.size >= 2
       @stations = stations
       @@routes_number += 1
       @number = @@routes_number
-      puts "New route number #{@number} (route_#{@number}: #{@stations.first} - #{@stations.last}) initialized."
+      puts "Новый маршрут номер #{@number} (route_#{@number}: #{@stations.first} - #{@stations.last}) создан."
     else
-      puts "Sorry, impossible to initialize route without at least to stations."
+      puts "Маршрут должен содержать как минимум 2 станции."
     end
   end
 
   def add_station(station)
     @stations.insert(-2, station)
-    puts "New station (#{station}) added to the route_#{@number}."
+    puts "Новая станция (#{station}) добавлена в маршрут #{@number}."
   end
 
   def del_station(station)
     if @stations.include?(station)
       @stations.delete(station)
-      puts "Station #{station} removed from the route_#{@number}."
+      puts "Станция #{station} удалена из маршрута - #{@number}."
     else
-      puts "Sorry, can't remove the station #{station} from the route_#{@number}, because there is no such station in this route."
+      puts "Невозможно удалить #{station} из маршрута #{@number},нет такой станции в маршруте."
     end
   end
 
   def stations_list
-    puts "The route_#{@number} from #{@stations.first} to #{@stations.last} has next stations: "
+    puts "Маршрут#{@number} от #{@stations.first} до #{@stations.last} имеет следующую станцию: "
     @stations.each_with_index{ |station, index| puts "#{index + 1}. #{station}"}
   end
 
@@ -168,11 +170,41 @@ class Route
     @stations
   end
 end
-#make new Train instance
-puts "Введите поочередно название поезда,тип (1-груз или 2-пасс),кол-во вагонов поезда"
 
-train1 = Train.new("cargo", 22)
-train2 = Train.new("pass", 10)
+train_1 = Train.new("Поезд1","груз", 15)
+train_2 = Train.new("Поезд2","пасс", 20)
+station_1 = RailwayStation.new("Парк") 
+route_1 = Route.new(["Парк","Кокосовая","Банановая","Депо"])
 
-station1 = RailwayStation.new("Park") 
-route1 = Route.new(["Park", "Street1", "Street2", "Depo"])
+train_1.current_speed
+train_1.accelerate(30)
+train_1.current_speed
+train_1.accelerate(40)
+train_1.current_speed
+train_1.slow_down(70)
+train_1.current_speed
+train_1.cars
+train_1.car_remove
+train_1.cars
+train_2.cars
+train_2.add_car
+train_2.cars
+
+puts "\n" + "********* СТАНЦИИ **************" + "\n"
+puts "\n"
+station_1.take_train
+station_1.take_train(train_1.train_params)
+station_1.take_train(train_2.train_params)
+station_1.trains_type
+station_1.send_train(train_1.train_params)
+station_1.trains
+
+puts "\n" + "********* МАРШРУТЫ **************" + "\n"
+puts "\n"
+route_1.stations_list
+route_1.add_station("Клубничная") 
+route_1.add_station("Апельсиновая")
+route_1.stations_list
+route_1.del_station("Клубничная")
+route_1.stations_list
+route_1.del_station("Банановая")

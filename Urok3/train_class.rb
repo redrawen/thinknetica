@@ -4,7 +4,7 @@ class Train
   #attr_reader:speed # геттер  
   #attr_accessor:speed # и геттер и сеттер
 
-@@trains_number = 0
+@@trains_num = 0
 
   def initialize(name,type,cars) 
     @name = name
@@ -12,9 +12,9 @@ class Train
     @cars = cars
     @speed = 0
     @route = []
-    @@trains_number += 1
-    @number = @@trains_number
-    puts "Новый поезд НОМЕР: #{@number} (train_#{@number}: ТИП: #{@type}, КОЛ_ВО ВАГОНОВ: #{@cars})!!!"
+    @@trains_num += 1
+    @number = @@trains_num
+    puts "Новый поезд НОМЕР: #{name} #{@number} (train_#{@number}: ТИП: #{@type}, КОЛ_ВО ВАГОНОВ: #{@cars})!!!"
   end
 
   #def description
@@ -93,6 +93,7 @@ end
 
 class RailwayStation
   @@stations_num = 0
+  
   def initialize(name)
     @name = name
     @trains = []
@@ -171,40 +172,41 @@ class Route
   end
 end
 
-train_1 = Train.new("Поезд1","груз", 15)
-train_2 = Train.new("Поезд2","пасс", 20)
-station_1 = RailwayStation.new("Парк") 
-route_1 = Route.new(["Парк","Кокосовая","Банановая","Депо"])
+train1 = Train.new("Поезд1","груз", 15)
+train2 = Train.new("Поезд2","пасс", 20)
+station1 = RailwayStation.new("Парк") 
+route1 = Route.new(["Парк","Кокосовая","Банановая","Депо"])
 
-train_1.current_speed
-train_1.accelerate(30)
-train_1.current_speed
-train_1.accelerate(40)
-train_1.current_speed
-train_1.slow_down(70)
-train_1.current_speed
-train_1.cars
-train_1.car_remove
-train_1.cars
-train_2.cars
-train_2.add_car
-train_2.cars
+train1.current_speed
+train1.accelerate(30)
+train1.current_speed
+train1.accelerate(40)
+train1.current_speed
+train1.slow_down(70)
+train1.current_speed
+train1.cars
+train1.car_remove
+train1.cars
+train2.cars
+train2.add_car
+train2.cars
 
-puts "\n" + "********* СТАНЦИИ **************" + "\n"
-puts "\n"
-station_1.take_train
-station_1.take_train(train_1.train_params)
-station_1.take_train(train_2.train_params)
-station_1.trains_type
-station_1.send_train(train_1.train_params)
-station_1.trains
+puts "-СТАНЦИИ-"
+puts"------------------------------------"
+station1.take_train
+station1.take_train(train1.train_params)
+station1.take_train(train2.train_params)
+station1.trains_type
+station1.send_train(train1.train_params)
+station1.trains
 
-puts "\n" + "********* МАРШРУТЫ **************" + "\n"
-puts "\n"
-route_1.stations_list
-route_1.add_station("Клубничная") 
-route_1.add_station("Апельсиновая")
-route_1.stations_list
-route_1.del_station("Клубничная")
-route_1.stations_list
-route_1.del_station("Банановая")
+"-МАРШРУТЫ-"
+puts"------------------------------------"
+
+route1.stations_list
+route1.add_station("Клубничная") 
+route1.add_station("Апельсиновая")
+route1.stations_list
+route1.del_station("Клубничная")
+route1.stations_list
+route1.del_station("Банановая")

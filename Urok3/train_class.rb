@@ -2,7 +2,7 @@
 class Train
   #attr_writer:speed
   #attr_reader:speed # геттер  
-  #attr_accessor:speed # и геттер и сеттер
+  attr_accessor:speed # и геттер и сеттер
 
 @@trains_num = 0
 
@@ -14,7 +14,7 @@ class Train
     @route = []
     @@trains_num += 1
     @number = @@trains_num
-    puts "Новый поезд НОМЕР: #{name} #{@number} (train_#{@number}: ТИП: #{@type}, КОЛ_ВО ВАГОНОВ: #{@cars})!!!"
+    puts "---Новый поезд НОМЕР: #{name} #{@number} (train_#{@number}: ТИП: #{@type}, КОЛ_ВО ВАГОНОВ: #{@cars})!!!"
   end
 
   #def description
@@ -23,11 +23,11 @@ class Train
 
   def accelerate(value)
     @speed += value
-    puts "Добавлено #{value} к текущей скорости поезда #{@number}"
+    puts "Скорость поезда #{@number} увеличилась на #{value}"
   end
 
   def current_speed
-    puts "Текущая скорость поезда #{@number} - #{@speed}"
+    puts "Текущая скорость поезда #{@number} = #{@speed}"
   end
 
   def slow_down(value)
@@ -35,33 +35,37 @@ class Train
       puts "Поезд #{@number} не движется!"
     elsif @speed > value
       @speed -= value
-      puts "Уменьшить скорость #{@number} на #{value}"
+      puts "Скорость поезда #{@number} уменьшилась на #{value}"
     else
       @speed = 0
-      puts "Поезд #{@number} остановлен"
+      puts "Поезд #{@number} полностью остановился"
     end
   end 
 
   def cars
-    puts "Кол-во вагонов #{@cars} у поезда #{@number}"
+    puts "Кол-во вагонов у поезда #{@number} = #{@cars}"
+    # Грузовые
+    # Пассажирские
   end
 
   def add_car
+    # условие присоединения вагонов по типу 
     if @speed == 0
       @cars += 1
       puts "Вагон прицеплен к поезду #{@number}"
     else
-      puts "нельзя прицепить вагон к движущемуся поезду(train_#{@number})"
+      puts "Невозможно прицепить вагон к движущемуся поезду(train_#{@number})"
     end
   end
 
   def car_remove
+    # условие отсоединения вагонов по типу 
     if @speed == 0
       if @cars > 0
         @cars -= 1
-        puts "Вагон отцеплен от поезда#{@number}"
+        puts "Вагон отцеплен от поезда #{@number}"
       else
-        puts "Нет вагоно для отцепки#{@number}!"
+        puts "Нет вагонов для отцепки #{@number}!"
       end
     else
       puts "Нельзя отцепить вагон от движущегося поезда(train_#{@number})"
@@ -83,7 +87,7 @@ class Train
   end
 
   def position
-    puts "Для поезда #{@number} текущая станция: #{@station}."
+    puts "Поезд #{@number} сейчас находится на станции: #{@station}."
   end
 
   def train_params
@@ -98,7 +102,7 @@ class RailwayStation
     @name = name
     @trains = []
     @@stations_num += 1
-    puts "Новая станция (#{@name})!!!"
+    puts "--- Cоздана новая станция (#{@name})!!!"
   end
 
   def take_train(params = {})
@@ -118,8 +122,8 @@ class RailwayStation
 
   def trains_type
     puts "Всего #{@trains.size} поездов на станции #{@name}:"
-    puts " - грузовых: #{(@trains.select {|train| train[:type] == "груз"}).size}"
-    puts " - пассажирских: #{(@trains.select {|train| train[:type] == "пасс"}).size}"
+    puts " - грузовых: #{(@trains.select {|train| train[:type] == "cargo"}).size}"
+    puts " - пассажирских: #{(@trains.select {|train| train[:type] == "pass"}).size}"
   end
 
   def send_train(params = {})
@@ -132,7 +136,6 @@ class RailwayStation
     end
   end
 end
-
 
 class Route
   @@routes_number = 0
@@ -163,7 +166,7 @@ class Route
   end
 
   def stations_list
-    puts "Маршрут#{@number} от #{@stations.first} до #{@stations.last} имеет следующую станцию: "
+    puts "Маршрут #{@number} от #{@stations.first} до #{@stations.last} имеет следующую станцию: "
     @stations.each_with_index{ |station, index| puts "#{index + 1}. #{station}"}
   end
 
